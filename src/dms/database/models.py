@@ -1,4 +1,4 @@
-from sqlalchemy import String, ForeignKey, Table, Column
+from sqlalchemy import String, ForeignKey, Table, Column, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -20,6 +20,13 @@ document_tags = Table(
         primary_key=True,
     )
 )
+
+
+class ConfigEntry(Base):
+    __tablename__ = "config"
+
+    key: Mapped[str] = mapped_column(String(255), primary_key=True)
+    value: Mapped[str] = mapped_column(Text)
 
 
 class Folder(Base):
@@ -55,6 +62,6 @@ class Tag(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
 
     documents: Mapped[list["Document"]] = relationship(secondary=document_tags, back_populates="tags")
